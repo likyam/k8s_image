@@ -24,5 +24,10 @@ func main() {
 			"orderInfo": orderInfo,
 		})
 	})
+	r.GET("/healthz", func(c *gin.Context) {
+		c.JSON(200, gin.H{
+			"status": "ok",
+		})
+	})
 	r.Run() // 监听并在 0.0.0.0:8080 上启动服务
 }
