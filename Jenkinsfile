@@ -27,8 +27,8 @@ pipeline{
 
         //镜像名称
         ORDERAPI_DOCKER_IMAGE_NAME = "order-api:$DEV_IMAGE_VERSION"
-        ORDERSERVER_DOCKER_IMAGE_NAME = "order-service:$DEV_IMAGE_VERSION"
-        USERSERVER_DOCKER_IMAGE_NAME = "user-service:$DEV_IMAGE_VERSION"
+        ORDERSERVER_DOCKER_IMAGE_NAME = "order-server:$DEV_IMAGE_VERSION"
+        USERSERVER_DOCKER_IMAGE_NAME = "user-server:$DEV_IMAGE_VERSION"
 
         //镜像名称
         ORDERAPI_REGISTRY_IMAGE_NAME = "registry.cn-guangzhou.aliyuncs.com/likyam_docker/order-api:$DEV_IMAGE_VERSION"
@@ -79,7 +79,7 @@ pipeline{
 
                 //删除本地镜像
                 sh "docker rmi $ORDERAPI_DOCKER_IMAGE_NAME"
-                sh "docker rmi $USERSERVER_DOCKER_IMAGE_NAME"
+                sh "docker rmi $ORDERSERVER_DOCKER_IMAGE_NAME"
                 sh "docker rmi $USERSERVER_DOCKER_IMAGE_NAME"
 
                 //删除缓存的中间镜像。如果是第一次部署项目，可先将该命令注释。
