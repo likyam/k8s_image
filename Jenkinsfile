@@ -19,21 +19,21 @@ pipeline{
 
         //Dockerfile 文件地址
         ORDERAPI_DOCKERFILE = "$WORKSPACE/OrderApi/Dockerfile"
-        ORDERSERVICE_DOCKERFILE = "$WORKSPACE/OrderService/Dockerfile"
-        USERSERVICE_DOCKERFILE = "$WORKSPACE/UserService/Dockerfile"
+        ORDERSERVER_DOCKERFILE = "$WORKSPACE/OrderServer/Dockerfile"
+        USERSERVER_DOCKERFILE = "$WORKSPACE/UserServer/Dockerfile"
 
         //yaml 文件地址
         YAML_FILE = "$WORKSPACE/service/permission/devops/dev/dev.yaml"
 
         //镜像名称
         ORDERAPI_DOCKER_IMAGE_NAME = "order-api:$DEV_IMAGE_VERSION"
-        ORDERSERVICE_DOCKER_IMAGE_NAME = "order-service:$DEV_IMAGE_VERSION"
-        USERSERVICE_DOCKER_IMAGE_NAME = "user-service:$DEV_IMAGE_VERSION"
+        ORDERSERVER_DOCKER_IMAGE_NAME = "order-service:$DEV_IMAGE_VERSION"
+        USERSERVER_DOCKER_IMAGE_NAME = "user-service:$DEV_IMAGE_VERSION"
 
         //镜像名称
         ORDERAPI_REGISTRY_IMAGE_NAME = "registry.cn-guangzhou.aliyuncs.com/likyam_docker/order-api:$DOCKER_IMAGE_NAME"
-        ORDERSERVICE_REGISTRY_IMAGE_NAME = "registry.cn-guangzhou.aliyuncs.com/likyam_docker/order-server:$DOCKER_IMAGE_NAME"
-        USERSERVICE_REGISTRY_IMAGE_NAME = "registry.cn-guangzhou.aliyuncs.com/likyam_docker/user-server:$DOCKER_IMAGE_NAME"
+        ORDERSERVER_REGISTRY_IMAGE_NAME = "registry.cn-guangzhou.aliyuncs.com/likyam_docker/order-server:$DOCKER_IMAGE_NAME"
+        USERSERVER_REGISTRY_IMAGE_NAME = "registry.cn-guangzhou.aliyuncs.com/likyam_docker/user-server:$DOCKER_IMAGE_NAME"
 
     }
 
@@ -45,8 +45,8 @@ pipeline{
                 echo '>>>>>>>>>>>>>>>>>>START BUILD IMAGE<<<<<<<<<<<<<<<<<<<<'
 
                 sh "docker build -t $ORDERAPI_DOCKER_IMAGE_NAME -f $ORDERAPI_DOCKERFILE ."
-                sh "docker build -t $ORDERSERVICE_DOCKER_IMAGE_NAME -f $ORDERSERVICE_DOCKERFILE ."
-                sh "docker build -t $USERSERVICE_DOCKER_IMAGE_NAME -f $USERSERVICE_DOCKERFILE ."
+                sh "docker build -t $ORDERSERVER_DOCKER_IMAGE_NAME -f $ORDERSERVER_DOCKERFILE ."
+                sh "docker build -t $USERSERVER_DOCKER_IMAGE_NAME -f $USERSERVER_DOCKERFILE ."
 
                 echo '>>>>>>>>>>>>>>>>>>START BUILD IMAGE<<<<<<<<<<<<<<<<<<<<'
             }
@@ -62,11 +62,11 @@ pipeline{
                 sh "docker tag $ORDERAPI_DOCKER_IMAGE_NAME $ORDERAPI_REGISTRY_IMAGE_NAME"
                 sh "docker push $ORDERAPI_REGISTRY_IMAGE_NAME"
 
-                sh "docker tag $ORDERSERVICE_DOCKER_IMAGE_NAME $ORDERSERVICE_REGISTRY_IMAGE_NAME"
-                sh "docker push $ORDERSERVICE_REGISTRY_IMAGE_NAME"
+                sh "docker tag $ORDERSERVER_DOCKER_IMAGE_NAME $ORDERSERVER_REGISTRY_IMAGE_NAME"
+                sh "docker push $ORDERSERVER_REGISTRY_IMAGE_NAME"
 
-                sh "docker tag $USERSERVICE_DOCKER_IMAGE_NAME $USERSERVICE_REGISTRY_IMAGE_NAME"
-                sh "docker push $USERSERVICE_REGISTRY_IMAGE_NAME"
+                sh "docker tag $USERSERVER_DOCKER_IMAGE_NAME $USERSERVER_REGISTRY_IMAGE_NAME"
+                sh "docker push $USERSERVER_REGISTRY_IMAGE_NAME"
 
                 echo '>>>>>>>>>>>>>>>>>>END PUSH IMAGE<<<<<<<<<<<<<<<<<<<<'
             }
@@ -79,8 +79,8 @@ pipeline{
 
                 //删除本地镜像
                 sh "docker rmi $ORDERAPI_DOCKER_IMAGE_NAME"
-                sh "docker rmi $USERSERVICE_DOCKER_IMAGE_NAME"
-                sh "docker rmi $USERSERVICE_DOCKER_IMAGE_NAME"
+                sh "docker rmi $USERSERVER_DOCKER_IMAGE_NAME"
+                sh "docker rmi $USERSERVER_DOCKER_IMAGE_NAME"
 
                 //删除缓存的中间镜像。如果是第一次部署项目，可先将该命令注释。
                 //后面再打开该参数。不删除的话，会一直增加中间镜像，占用磁盘空间。
