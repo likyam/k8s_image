@@ -11,7 +11,7 @@ import (
 func main() {
 	r := gin.Default()
 	r.GET("/order", func(c *gin.Context) {
-		conn, err := grpc.Dial("istio-demo-order-server-svc:8002", grpc.WithTransportCredentials(insecure.NewCredentials()))
+		conn, err := grpc.Dial("order-server:8002", grpc.WithTransportCredentials(insecure.NewCredentials()))
 		if err != nil {
 			panic(err)
 		}

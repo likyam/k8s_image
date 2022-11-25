@@ -26,7 +26,7 @@ func (o orderService) mustEmbedUnimplementedOrderServiceServer() {
 }
 
 func (o orderService) getUserName() string {
-	conn, err := grpc.Dial("istio-demo-user-server-svc:8003", grpc.WithTransportCredentials(insecure.NewCredentials()))
+	conn, err := grpc.Dial("user-server:8003", grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		panic(err)
 	}
