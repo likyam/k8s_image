@@ -31,9 +31,9 @@ pipeline{
         USERSERVER_DOCKER_IMAGE_NAME = "user-service:$DEV_IMAGE_VERSION"
 
         //镜像名称
-        ORDERAPI_REGISTRY_IMAGE_NAME = "registry.cn-guangzhou.aliyuncs.com/likyam_docker/order-api:$DOCKER_IMAGE_NAME"
-        ORDERSERVER_REGISTRY_IMAGE_NAME = "registry.cn-guangzhou.aliyuncs.com/likyam_docker/order-server:$DOCKER_IMAGE_NAME"
-        USERSERVER_REGISTRY_IMAGE_NAME = "registry.cn-guangzhou.aliyuncs.com/likyam_docker/user-server:$DOCKER_IMAGE_NAME"
+        ORDERAPI_REGISTRY_IMAGE_NAME = "registry.cn-guangzhou.aliyuncs.com/likyam_docker/order-api:$DEV_IMAGE_VERSION"
+        ORDERSERVER_REGISTRY_IMAGE_NAME = "registry.cn-guangzhou.aliyuncs.com/likyam_docker/order-server:$DEV_IMAGE_VERSION"
+        USERSERVER_REGISTRY_IMAGE_NAME = "registry.cn-guangzhou.aliyuncs.com/likyam_docker/user-server:$DEV_IMAGE_VERSION"
 
     }
 
