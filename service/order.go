@@ -26,11 +26,16 @@ func (o orderService) mustEmbedUnimplementedOrderServiceServer() {
 }
 
 func (o orderService) getUserName() string {
-	conn, err := grpc.Dial("user_service:8003", grpc.WithTransportCredentials(insecure.NewCredentials()))
+	conn, err := grpc.Dial("user_server:8003", grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		panic(err)
 	}
-	defer conn.Close()
+	defer func(conn *grpc.ClientConn) {
+		err := conn.Close()
+		if err != nil {
+
+		}
+	}(conn)
 	userClient := NewUserClient(conn)
 	request := &UserRequest{Id: 1}
 	userInfo, err := userClient.GetUser(context.Background(), request)
