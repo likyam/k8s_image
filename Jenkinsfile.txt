@@ -5,7 +5,7 @@ pipeline{
     //选项
     options {
         //设置终端显示颜色
-        ansiColor('gnome-terminal')
+        //ansiColor('gnome-terminal')
     }
 
     //全局变量
@@ -69,11 +69,6 @@ pipeline{
 
                 echo '>>>>>>>>>>>>>>>>>>START PUSH IMAGE<<<<<<<<<<<<<<<<<<<<'
 
-                //账号密码脱敏
-                //withCredentials([usernamePassword(credentialsId: 'harbor_secret', passwordVariable: 'password', usernameVariable: 'username')]) {
-                //    sh "echo $password | docker login https://$REGISTRY_URL -u $username --password-stdin"
-                //}
-
                 sh "docker login --username=qq13044226657 --password=qq87708291. registry.cn-guangzhou.aliyuncs.com"
 
                 sh "docker tag $ORDERAPI_DOCKER_IMAGE_NAME $ORDERAPI_REGISTRY_IMAGE_NAME"
@@ -95,8 +90,6 @@ pipeline{
                 echo '>>>>>>>>>>>>>>>>>>START DELETE IMAGE<<<<<<<<<<<<<<<<<<<<'
 
                 //删除本地镜像
-                //sh "docker rmi janrs-permission-api:$DEV_IMAGE_VERSION"
-                //sh "docker rmi 172.16.222.250:8443/janrs-io/janrs-permission-api:$DEV_IMAGE_VERSION"
                 sh "docker rmi $ORDERAPI_DOCKER_IMAGE_NAME"
                 sh "docker rmi $USERSERVICE_DOCKER_IMAGE_NAME"
                 sh "docker rmi $USERSERVICE_DOCKER_IMAGE_NAME"
