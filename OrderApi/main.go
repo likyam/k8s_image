@@ -35,7 +35,12 @@ func main() {
 
 		//md := metadata.New(map[string]string{"x-request-id": c.GetHeader("x-request-id")})
 		//ctx := metadata.NewOutgoingContext(context.Background(), md)
-		ctx := metadata.AppendToOutgoingContext(context.Background(), "x-request-id", c.GetHeader("x-request-id"))
+		ctx := metadata.AppendToOutgoingContext(context.Background(), "x-request-id", c.GetHeader("x-request-id"), "x-request-id", c.GetHeader("x-request-id"),
+			"x-b3-traceid", c.GetHeader("x-b3-traceid"),
+			"x-b3-spanid", c.GetHeader("x-b3-spanid"),
+			"x-b3-parentspanid", c.GetHeader("x-b3-parentspanid"),
+			"x-b3-sampled", c.GetHeader("x-b3-sampled"),
+			"x-b3-flags", c.GetHeader("x-b3-flags"))
 		orderInfo, err := orderClient.GetOrder(ctx, request)
 
 		fmt.Println(orderInfo)
