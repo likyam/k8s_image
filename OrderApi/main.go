@@ -41,7 +41,8 @@ func main() {
 		fmt.Println(orderInfo)
 
 		c.JSON(200, gin.H{
-			"orderInfo": orderInfo,
+			"orderInfo":    orderInfo,
+			"x-request-id": c.GetHeader("x-request-id"),
 		})
 	})
 	r.GET("/healthz", func(c *gin.Context) {
