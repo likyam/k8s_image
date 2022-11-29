@@ -13,6 +13,7 @@ import (
 func main() {
 	r := gin.Default()
 	r.GET("/order", func(c *gin.Context) {
+		fmt.Println(c.GetHeader("x-request-id"))
 
 		var opts []grpc.DialOption
 		opts = append(opts, grpc.WithTransportCredentials(insecure.NewCredentials()))
@@ -33,18 +34,8 @@ func main() {
 
 		request := &service.OrderRequest{Id: 1}
 
-		ctx := context.Background()
-
-		md, ok := metadata.FromIncomingContext(ctx)
-		if !ok {
-			return
-		}
-		md.Set("x-request-id", c.GetHeader("x-request-id"))
-		fmt.Println(c.GetHeader("x-request-id"))
-		err = grpc.SetHeader(ctx, md)
-		if err != nil {
-			return
-		}
+		md := metadata.New(map[string]string{"x-request-id": c.GetHeader("x-request-id")})
+		ctx := metadata.NewOutgoingContext(context.Background(), md)
 
 		orderInfo, err := orderClient.GetOrder(ctx, request)
 
