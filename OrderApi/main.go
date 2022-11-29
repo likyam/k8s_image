@@ -34,7 +34,7 @@ func main() {
 
 		request := &service.OrderRequest{Id: 1}
 
-		md := metadata.New(map[string]string{"x-request-id": c.GetHeader("x-request-id")})
+		md := metadata.New(map[string]string{"guid:x-request-id": c.GetHeader("guid:x-request-id")})
 		ctx := metadata.NewOutgoingContext(context.Background(), md)
 
 		orderInfo, err := orderClient.GetOrder(ctx, request)
