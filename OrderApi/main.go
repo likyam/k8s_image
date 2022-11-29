@@ -11,6 +11,7 @@ import (
 )
 
 func main() {
+	fmt.Println("ok")
 	r := gin.Default()
 	r.GET("/order", func(c *gin.Context) {
 		var opts []grpc.DialOption
