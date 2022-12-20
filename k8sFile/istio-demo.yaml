@@ -1,0 +1,48 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  creationTimestamp: "2022-11-25T18:18:38Z"
+  generation: 1
+  managedFields:
+  - apiVersion: networking.k8s.io/v1
+    fieldsType: FieldsV1
+    fieldsV1:
+      f:spec:
+        f:defaultBackend:
+          .: {}
+          f:service:
+            .: {}
+            f:name: {}
+            f:port:
+              .: {}
+              f:number: {}
+        f:rules: {}
+    manager: rancher
+    operation: Update
+    time: "2022-11-25T18:18:38Z"
+  - apiVersion: networking.k8s.io/v1
+    fieldsType: FieldsV1
+    fieldsV1:
+      f:status:
+        f:loadBalancer:
+          f:ingress: {}
+    manager: nginx-ingress-controller
+    operation: Update
+    subresource: status
+    time: "2022-12-07T07:00:29Z"
+  name: istio-demo
+  namespace: istio-system
+  resourceVersion: "315263"
+  uid: eb4c7daf-cf52-4114-99fa-5a0e76e48fa1
+spec:
+  defaultBackend:
+    service:
+      name: istio-ingressgateway
+      port:
+        number: 80
+  rules:
+  - host: id.likyam.cn
+status:
+  loadBalancer:
+    ingress:
+    - ip: 172.18.41.239

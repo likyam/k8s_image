@@ -1,0 +1,41 @@
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  creationTimestamp: "2022-11-25T16:46:08Z"
+  generation: 3
+  labels:
+    istio-demo: vs
+  managedFields:
+  - apiVersion: networking.istio.io/v1beta1
+    fieldsType: FieldsV1
+    fieldsV1:
+      f:metadata:
+        f:labels:
+          .: {}
+          f:istio-demo: {}
+      f:spec:
+        .: {}
+        f:gateways: {}
+        f:hosts: {}
+        f:http: {}
+    manager: rancher
+    operation: Update
+    time: "2022-11-25T16:46:08Z"
+  name: istio-demo-vs
+  namespace: istio-demo
+  resourceVersion: "73629"
+  uid: 7613e5f5-e389-4f6b-b359-619438d1f3e5
+spec:
+  gateways:
+  - istio-demo-gateway
+  hosts:
+  - id.likyam.cn
+  http:
+  - match:
+    - uri:
+        prefix: /
+    route:
+    - destination:
+        host: order-api
+        port:
+          number: 8080
