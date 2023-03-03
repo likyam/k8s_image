@@ -1,0 +1,51 @@
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: "2022-11-25T16:56:51Z"
+  labels:
+    istio-demo: order-server-svc
+  managedFields:
+  - apiVersion: v1
+    fieldsType: FieldsV1
+    fieldsV1:
+      f:metadata:
+        f:labels:
+          .: {}
+          f:istio-demo: {}
+      f:spec:
+        f:internalTrafficPolicy: {}
+        f:ports:
+          .: {}
+          k:{"port":8002,"protocol":"TCP"}:
+            .: {}
+            f:name: {}
+            f:port: {}
+            f:protocol: {}
+            f:targetPort: {}
+        f:selector: {}
+        f:sessionAffinity: {}
+        f:type: {}
+    manager: rancher
+    operation: Update
+    time: "2022-11-25T16:56:51Z"
+  name: order-server
+  namespace: istio-demo
+spec:
+  clusterIP: 10.43.78.228
+  clusterIPs:
+  - 10.43.78.228
+  internalTrafficPolicy: Cluster
+  ipFamilies:
+  - IPv4
+  ipFamilyPolicy: SingleStack
+  ports:
+  - name: order-server
+    port: 8002
+    protocol: TCP
+    targetPort: 8002
+  selector:
+    istio-demo: order-server
+  sessionAffinity: None
+  type: ClusterIP
+status:
+  loadBalancer: {}
