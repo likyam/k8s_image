@@ -24,8 +24,6 @@ metadata:
     time: "2022-11-25T17:29:02Z"
   name: istio-demo-gateway
   namespace: istio-demo
-  resourceVersion: "87317"
-  uid: fe103ad8-9094-4a3a-a85c-21172d63c8b3
 spec:
   selector:
     istio: ingressgateway

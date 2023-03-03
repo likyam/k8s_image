@@ -32,8 +32,6 @@ metadata:
     time: "2022-12-07T07:00:29Z"
   name: istio-demo
   namespace: istio-system
-  resourceVersion: "315263"
-  uid: eb4c7daf-cf52-4114-99fa-5a0e76e48fa1
 spec:
   defaultBackend:
     service:

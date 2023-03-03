@@ -23,8 +23,6 @@ metadata:
     time: "2022-11-25T16:46:08Z"
   name: istio-demo-vs
   namespace: istio-demo
-  resourceVersion: "73629"
-  uid: 7613e5f5-e389-4f6b-b359-619438d1f3e5
 spec:
   gateways:
   - istio-demo-gateway
