@@ -54,7 +54,7 @@ func main() {
 
 		c.JSON(200, gin.H{
 			"orderInfo":         orderInfo,
-			"v":                 1,
+			"v":                 2,
 			"x-request-id":      c.GetHeader("x-request-id"),
 			"x-b3-traceid":      c.GetHeader("x-b3-traceid"),
 			"x-b3-spanid":       c.GetHeader("x-b3-spanid"),
