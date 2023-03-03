@@ -63,7 +63,7 @@ func main() {
 
 		c.JSON(200, gin.H{
 			"orderInfo":         orderInfo,
-			"v":                 2,
+			"v":                 3,
 			"x-request-id":      c.GetHeader("x-request-id"),
 			"x-b3-traceid":      c.GetHeader("x-b3-traceid"),
 			"x-b3-spanid":       c.GetHeader("x-b3-spanid"),
@@ -95,7 +95,7 @@ func Trace() gin.HandlerFunc {
 			Reporter: &jaegercfg.ReporterConfig{
 				//当span发送到服务器时要不要打日志
 				LogSpans:           true,
-				LocalAgentHostPort: "istio-system.jaeger-collector:14268",
+				LocalAgentHostPort: "istio-system.jaeger-collector:14250",
 			},
 			ServiceName: "gin",
 		}
