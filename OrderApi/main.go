@@ -4,40 +4,17 @@ import (
 	"context"
 	"fmt"
 	"github.com/gin-gonic/gin"
-	"github.com/jaegertracing/jaeger-client-go/config"
-	"github.com/opentracing/opentracing-go"
 	"github.com/uber/jaeger-client-go"
 	jaegercfg "github.com/uber/jaeger-client-go/config"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 	"io"
 	"istioDemo/service"
-	"os"
 )
 
 func main() {
 
 	fmt.Println("ok")
-
-	// Jaeger配置
-	cfg, err := config.FromEnv()
-	if err != nil {
-		// 处理错误
-	}
-	tracer, closer, err := cfg.NewTracer(config.Logger(jaeger.StdLogger))
-	if err != nil {
-		// 处理错误
-	}
-	defer func(closer io.Closer) {
-		err := closer.Close()
-		if err != nil {
-
-		}
-	}(closer)
-
-	// 注册Jaeger的OpenTracing中间件
-	gin.DefaultWriter = io.MultiWriter(os.Stdout)
-	opentracing.SetGlobalTracer(tracer)
 
 	r := gin.Default()
 	r.Use(Trace())
@@ -91,7 +68,7 @@ func main() {
 			"status": "ok",
 		})
 	})
-	err = r.Run()
+	err := r.Run()
 	if err != nil {
 		return
 	} // 监听并在 0.0.0.0:8080 上启动服务
