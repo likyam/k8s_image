@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"github.com/gin-gonic/gin"
+	"github.com/opentracing/opentracing-go"
 	"github.com/uber/jaeger-client-go"
 	jaegercfg "github.com/uber/jaeger-client-go/config"
 	"google.golang.org/grpc"
@@ -20,6 +21,14 @@ func main() {
 	r.Use(Trace())
 
 	r.GET("/order", func(c *gin.Context) {
+
+		// 从上下文中获取span
+		span, _ := c.Get("span")
+		if span, ok := span.(opentracing.Span); ok {
+			span.SetTag("url", c.Request.URL.Path)
+			span.SetTag("method", c.Request.Method)
+		}
+
 		var opts []grpc.DialOption
 		opts = append(opts, grpc.WithTransportCredentials(insecure.NewCredentials()))
 
@@ -101,10 +110,14 @@ func Trace() gin.HandlerFunc {
 
 			}
 		}(closer)
+		// 设置全局tracer
+		opentracing.SetGlobalTracer(tracer)
+
 		//最开始的span，以url开始
 		startSpan := tracer.StartSpan(ctx.Request.URL.Path)
 		defer startSpan.Finish()
 		ctx.Set("tracer", tracer)
+		ctx.Set("span", startSpan)
 		ctx.Set("parentSpan", startSpan)
 		ctx.Next()
 	}
