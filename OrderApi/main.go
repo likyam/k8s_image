@@ -48,8 +48,7 @@ func main() {
 		//	"x-b3-sampled", c.GetHeader("x-b3-sampled"),
 		//	"x-b3-flags", c.GetHeader("x-b3-flags"))
 
-		ctx := context.Background()
-		orderInfo, err := orderClient.GetOrder(ctx, request)
+		orderInfo, err := orderClient.GetOrder(context.WithValue(context.Background(), "ginContext", c), request)
 
 		fmt.Println(orderInfo)
 
