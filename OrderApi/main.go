@@ -104,8 +104,8 @@ func Trace() gin.HandlerFunc {
 		//最开始的span，以url开始
 		startSpan := tracer.StartSpan(ctx.Request.URL.Path)
 		defer startSpan.Finish()
-		//ctx.Set("tracer", tracer)
-		//ctx.Set("parentSpan", startSpan)
+		ctx.Set("tracer", tracer)
+		ctx.Set("parentSpan", startSpan)
 		ctx.Next()
 	}
 }
