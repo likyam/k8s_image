@@ -28,8 +28,7 @@ func main() {
 			span.SetTag("url", c.Request.URL.Path)
 			span.SetTag("method", c.Request.Method)
 		}
-		fmt.Println(span)
-		fmt.Println(c.Get("span"))
+		c.Set("span", span)
 		var opts []grpc.DialOption
 		opts = append(opts, grpc.WithTransportCredentials(insecure.NewCredentials()))
 
