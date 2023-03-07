@@ -76,7 +76,6 @@ func main() {
 			"x-b3-parentspanid": c.GetHeader("x-b3-parentspanid"),
 			"x-b3-sampled":      c.GetHeader("x-b3-sampled"),
 			"x-b3-flags":        c.GetHeader("x-b3-flags"),
-			"X-Trace-ID":        c.Request.Header.Get("X-Trace-ID"),
 		})
 	})
 	r.GET("/healthz", func(c *gin.Context) {
@@ -121,8 +120,8 @@ func Trace() gin.HandlerFunc {
 		opentracing.SetGlobalTracer(tracer)
 
 		// 从请求头中获取 Trace ID 和 Span ID
-		traceID := ctx.Request.Header.Get("X-Trace-ID")
-		spanID := ctx.Request.Header.Get("X-Span-ID")
+		traceID := ctx.GetHeader("x-b3-traceid")
+		spanID := ctx.GetHeader("x-b3-spanid")
 
 		// 创建跟踪上下文对象
 		var span opentracing.Span
