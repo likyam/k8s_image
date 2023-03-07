@@ -76,6 +76,7 @@ func main() {
 			"x-b3-parentspanid": c.GetHeader("x-b3-parentspanid"),
 			"x-b3-sampled":      c.GetHeader("x-b3-sampled"),
 			"x-b3-flags":        c.GetHeader("x-b3-flags"),
+			"X-Trace-ID":        c.Request.Header.Get("X-Trace-ID"),
 		})
 	})
 	r.GET("/healthz", func(c *gin.Context) {
