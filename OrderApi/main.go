@@ -28,7 +28,8 @@ func main() {
 			span.SetTag("url", c.Request.URL.Path)
 			span.SetTag("method", c.Request.Method)
 		}
-
+		fmt.Println(span)
+		fmt.Println(c.Get("span"))
 		var opts []grpc.DialOption
 		opts = append(opts, grpc.WithTransportCredentials(insecure.NewCredentials()))
 
@@ -62,7 +63,6 @@ func main() {
 		fmt.Println(orderInfo)
 
 		c.JSON(200, gin.H{
-			"c":                 c,
 			"orderInfo":         orderInfo,
 			"v":                 3,
 			"x-request-id":      c.GetHeader("x-request-id"),
