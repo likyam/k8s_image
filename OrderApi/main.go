@@ -89,12 +89,9 @@ func Trace() gin.HandlerFunc {
 		//jaeger配置
 		cfg := jaegercfg.Configuration{
 			Sampler: &jaegercfg.SamplerConfig{
-				Type:  jaeger.SamplerTypeConst,
 				Param: 1, //全部采样
 			},
 			Reporter: &jaegercfg.ReporterConfig{
-				//当span发送到服务器时要不要打日志
-				LogSpans:           true,
 				LocalAgentHostPort: "jaeger-collector.istio-system.svc.cluster.local:14268",
 			},
 			ServiceName: "gin",
