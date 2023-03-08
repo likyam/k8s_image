@@ -3,16 +3,13 @@ package main
 import (
 	"context"
 	"fmt"
+	"github.com/gin-gonic/gin"
+	"github.com/uber/jaeger-client-go"
 	jaegercfg "github.com/uber/jaeger-client-go/config"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 	"io"
 	"istioDemo/service"
-	"net/http"
-
-	"github.com/gin-gonic/gin"
-	"github.com/opentracing/opentracing-go"
-	"github.com/uber/jaeger-client-go"
 )
 
 func main() {
@@ -25,17 +22,8 @@ func main() {
 
 	r.GET("/order", func(c *gin.Context) {
 
-		// 从请求上下文中获取跟踪上下文对象
-		span := opentracing.SpanFromContext(c)
-		if span == nil {
-			c.JSON(http.StatusInternalServerError, gin.H{"message": "Internal Server Error"})
-			return
-		}
-
-		// 设置跟踪标签
-		span.SetTag("url", c.Request.URL.String())
-
 		var opts []grpc.DialOption
+
 		opts = append(opts, grpc.WithTransportCredentials(insecure.NewCredentials()))
 
 		conn, err := grpc.Dial("order-server:8002", opts...)
@@ -89,7 +77,7 @@ func main() {
 	} // 监听并在 0.0.0.0:8080 上启动服务
 }
 
-// 拦截器
+// /拦截器
 func Trace() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		//jaeger配置
@@ -101,7 +89,7 @@ func Trace() gin.HandlerFunc {
 			Reporter: &jaegercfg.ReporterConfig{
 				//当span发送到服务器时要不要打日志
 				LogSpans:           true,
-				LocalAgentHostPort: "jaeger-collector.istio-system.svc.cluster.local:14250",
+				LocalAgentHostPort: "192.168.10.130:6831",
 			},
 			ServiceName: "gin",
 		}
@@ -116,42 +104,11 @@ func Trace() gin.HandlerFunc {
 
 			}
 		}(closer)
-		// 设置全局tracer
-		opentracing.SetGlobalTracer(tracer)
-
-		// 从请求头中获取 Trace ID 和 Span ID
-		traceID := ctx.GetHeader("x-b3-traceid")
-		spanID := ctx.GetHeader("x-b3-spanid")
-
-		// 创建跟踪上下文对象
-		var span opentracing.Span
-		if traceID == "" || spanID == "" {
-			span = tracer.StartSpan(ctx.Request.URL.Path)
-		} else {
-			parentSpanContext, err := tracer.Extract(opentracing.HTTPHeaders, opentracing.HTTPHeadersCarrier(ctx.Request.Header))
-			if err != nil {
-				fmt.Printf("Failed to extract parent span: %v\n", err)
-				ctx.Next()
-				return
-			}
-			span = tracer.StartSpan(ctx.Request.URL.Path, opentracing.ChildOf(parentSpanContext))
-		}
-
-		// 将跟踪上下文对象存储到请求上下文中
-		ctx.Request = ctx.Request.WithContext(opentracing.ContextWithSpan(ctx.Request.Context(), span))
-
-		// 设置跟踪标签
-		span.SetTag("method", ctx.Request.Method)
-		span.SetTag("path", ctx.Request.URL.Path)
-
-		// 将 Trace ID 和 Span ID 存储到响应头中
-		ctx.Header("X-Trace-ID", span.Context().(jaeger.SpanContext).TraceID().String())
-		ctx.Header("X-Span-ID", span.Context().(jaeger.SpanContext).SpanID().String())
-
-		// 处理请求
+		//最开始的span，以url开始
+		startSpan := tracer.StartSpan(ctx.Request.URL.Path)
+		defer startSpan.Finish()
+		ctx.Set("tracer", tracer)
+		ctx.Set("parentSpan", startSpan)
 		ctx.Next()
-
-		// 结束跟踪
-		span.Finish()
 	}
 }
