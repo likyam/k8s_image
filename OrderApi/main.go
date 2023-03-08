@@ -26,7 +26,7 @@ func main() {
 	r.GET("/order", func(c *gin.Context) {
 
 		// 从请求上下文中获取跟踪上下文对象
-		span := opentracing.SpanFromContext(c.Request.Context())
+		span := opentracing.SpanFromContext(c)
 		if span == nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"message": "Internal Server Error"})
 			return
