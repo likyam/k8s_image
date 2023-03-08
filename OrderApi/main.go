@@ -6,6 +6,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/uber/jaeger-client-go"
 	jaegercfg "github.com/uber/jaeger-client-go/config"
+	jaegerlog "github.com/uber/jaeger-client-go/log"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 	"io"
@@ -88,9 +89,8 @@ func Trace() gin.HandlerFunc {
 			},
 			Reporter: &jaegercfg.ReporterConfig{
 				//当span发送到服务器时要不要打日志
-				LogSpans: true,
-				// collector 信息根据自己ip配置
-				CollectorEndpoint: "jaeger-collector.istio-system.svc.cluster.local:14268/api/traces",
+				LogSpans:           true,
+				LocalAgentHostPort: "jaeger-collector.istio-system.svc.cluster.local:14268/api/traces",
 			},
 			ServiceName: "gin",
 		}
@@ -107,6 +107,12 @@ func Trace() gin.HandlerFunc {
 		}(closer)
 		//最开始的span，以url开始
 		startSpan := tracer.StartSpan(ctx.Request.URL.Path)
+
+		jLogger := jaegerlog.StdLogger
+		tracer, closer, _ = cfg.NewTracer(
+			jaegercfg.Logger(jLogger),
+		)
+
 		defer startSpan.Finish()
 		ctx.Set("tracer", tracer)
 		ctx.Set("parentSpan", startSpan)
