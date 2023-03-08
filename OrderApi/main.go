@@ -89,7 +89,7 @@ func Trace() gin.HandlerFunc {
 			Reporter: &jaegercfg.ReporterConfig{
 				//当span发送到服务器时要不要打日志
 				LogSpans:           true,
-				LocalAgentHostPort: "192.168.10.130:6831",
+				LocalAgentHostPort: "jaeger-collector.istio-system.svc.cluster.local:14250",
 			},
 			ServiceName: "gin",
 		}
