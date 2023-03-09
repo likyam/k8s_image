@@ -19,7 +19,7 @@ func main() {
 
 	r := gin.Default()
 	// 添加 Jaeger 中间件
-	r.Use(Trace())
+	//r.Use(Trace())
 
 	r.GET("/order", func(c *gin.Context) {
 
@@ -58,7 +58,7 @@ func main() {
 
 		c.JSON(200, gin.H{
 			"orderInfo":         orderInfo,
-			"v":                 3,
+			"v":                 c.Handler(),
 			"x-request-id":      c.GetHeader("x-request-id"),
 			"x-b3-traceid":      c.GetHeader("x-b3-traceid"),
 			"x-b3-spanid":       c.GetHeader("x-b3-spanid"),
@@ -92,7 +92,7 @@ func Trace() gin.HandlerFunc {
 				LogSpans:          true,
 				CollectorEndpoint: "http://jaeger-collector.istio-system.svc.cluster.local:14268/api/traces",
 			},
-			ServiceName: "gin",
+			ServiceName: "order-api.istio-demo",
 		}
 		//创建jaeger
 		tracer, closer, err := cfg.NewTracer(jaegercfg.Logger(jaeger.StdLogger))
