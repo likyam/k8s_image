@@ -4,12 +4,8 @@ import (
 	"context"
 	"fmt"
 	"github.com/gin-gonic/gin"
-	"github.com/uber/jaeger-client-go"
-	jaegercfg "github.com/uber/jaeger-client-go/config"
-	jaegerlog "github.com/uber/jaeger-client-go/log"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
-	"io"
 	"istioDemo/service"
 )
 
@@ -58,7 +54,6 @@ func main() {
 
 		c.JSON(200, gin.H{
 			"orderInfo":         orderInfo,
-			"v":                 c.Handler(),
 			"x-request-id":      c.GetHeader("x-request-id"),
 			"x-b3-traceid":      c.GetHeader("x-b3-traceid"),
 			"x-b3-spanid":       c.GetHeader("x-b3-spanid"),
@@ -79,43 +74,43 @@ func main() {
 }
 
 // /拦截器
-func Trace() gin.HandlerFunc {
-	return func(ctx *gin.Context) {
-		//jaeger配置
-		cfg := jaegercfg.Configuration{
-			Sampler: &jaegercfg.SamplerConfig{
-				Type:  jaeger.SamplerTypeConst,
-				Param: 1, //全部采样
-			},
-			Reporter: &jaegercfg.ReporterConfig{
-				//当span发送到服务器时要不要打日志
-				LogSpans:          true,
-				CollectorEndpoint: "http://jaeger-collector.istio-system.svc.cluster.local:14268/api/traces",
-			},
-			ServiceName: "order-api.istio-demo",
-		}
-		//创建jaeger
-		tracer, closer, err := cfg.NewTracer(jaegercfg.Logger(jaeger.StdLogger))
-		if err != nil {
-			panic(err)
-		}
-		defer func(closer io.Closer) {
-			err := closer.Close()
-			if err != nil {
-
-			}
-		}(closer)
-		//最开始的span，以url开始
-		startSpan := tracer.StartSpan(ctx.Request.URL.Path)
-
-		jLogger := jaegerlog.StdLogger
-		tracer, closer, _ = cfg.NewTracer(
-			jaegercfg.Logger(jLogger),
-		)
-
-		defer startSpan.Finish()
-		ctx.Set("tracer", tracer)
-		ctx.Set("parentSpan", startSpan)
-		ctx.Next()
-	}
-}
+//func Trace() gin.HandlerFunc {
+//	return func(ctx *gin.Context) {
+//		//jaeger配置
+//		cfg := jaegercfg.Configuration{
+//			Sampler: &jaegercfg.SamplerConfig{
+//				Type:  jaeger.SamplerTypeConst,
+//				Param: 1, //全部采样
+//			},
+//			Reporter: &jaegercfg.ReporterConfig{
+//				//当span发送到服务器时要不要打日志
+//				LogSpans:          true,
+//				CollectorEndpoint: "http://jaeger-collector.istio-system.svc.cluster.local:14268/api/traces",
+//			},
+//			ServiceName: "order-api.istio-demo",
+//		}
+//		//创建jaeger
+//		tracer, closer, err := cfg.NewTracer(jaegercfg.Logger(jaeger.StdLogger))
+//		if err != nil {
+//			panic(err)
+//		}
+//		defer func(closer io.Closer) {
+//			err := closer.Close()
+//			if err != nil {
+//
+//			}
+//		}(closer)
+//		//最开始的span，以url开始
+//		startSpan := tracer.StartSpan(ctx.Request.URL.Path)
+//
+//		jLogger := jaegerlog.StdLogger
+//		tracer, closer, _ = cfg.NewTracer(
+//			jaegercfg.Logger(jLogger),
+//		)
+//
+//		defer startSpan.Finish()
+//		ctx.Set("tracer", tracer)
+//		ctx.Set("parentSpan", startSpan)
+//		ctx.Next()
+//	}
+//}
