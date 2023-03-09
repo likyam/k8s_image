@@ -40,6 +40,7 @@ func main() {
 
 		header := metadata.New(map[string]string{
 			"x-b3-traceid": c.GetHeader("x-b3-traceid"),
+			"test":         c.GetHeader("x-b3-traceid"),
 		})
 
 		var ctx = metadata.NewOutgoingContext(context.Background(), header)
