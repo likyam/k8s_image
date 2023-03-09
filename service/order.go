@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
+	"google.golang.org/grpc/metadata"
 )
 
 var OrderService = &orderService{}
@@ -13,10 +14,9 @@ type orderService struct {
 }
 
 func (o orderService) GetOrder(ctx context.Context, request *OrderRequest) (*OrderResponse, error) {
-	println(o.getUserName())
 	return &OrderResponse{
 		OrderId:  10,
-		UserName: o.getUserName(),
+		UserName: o.getUserName(ctx),
 	}, nil
 }
 
@@ -25,7 +25,21 @@ func (o orderService) mustEmbedUnimplementedOrderServiceServer() {
 	panic("implement me")
 }
 
-func (o orderService) getUserName() string {
+func (o orderService) getUserName(ctx context.Context) string {
+
+	// 解析metada中的信息并验证
+	md, ok := metadata.FromIncomingContext(ctx)
+
+	if !ok {
+		return ""
+	}
+
+	fmt.Println(md)
+	//header := metadata.New(map[string]string{
+	//	"x-b3-traceid": traceid,
+	//})
+	//
+	//var ctx = metadata.NewOutgoingContext(context.Background(), header)
 	conn, err := grpc.Dial("user-server:8003", grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		panic(err)
