@@ -46,6 +46,7 @@ func main() {
 			"x-b3-flags":        c.GetHeader("x-b3-flags"),
 			"x-request-id":      c.GetHeader("x-request-id"),
 			"test":              c.GetHeader("x-b3-traceid"),
+			"test-x-request-id": c.GetHeader("x-request-id"),
 		})
 
 		var ctx = metadata.NewOutgoingContext(context.Background(), header)

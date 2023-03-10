@@ -36,7 +36,7 @@ func (o orderService) getUserName(ctx context.Context) string {
 
 	fmt.Println(md["x-request-id"])
 	//header := metadata.New(map[string]string{
-	//	"x-b3-traceid": traceid,
+	//	"x-b3-traceid": md["x-request-id"][],
 	//})
 	//
 	//var ctx = metadata.NewOutgoingContext(context.Background(), header)
