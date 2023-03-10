@@ -39,8 +39,13 @@ func main() {
 		request := &service.OrderRequest{Id: 1}
 
 		header := metadata.New(map[string]string{
-			"x-b3-traceid": c.GetHeader("x-b3-traceid"),
-			"test":         c.GetHeader("x-b3-traceid"),
+			"x-b3-traceid":      c.GetHeader("x-b3-traceid"),
+			"x-b3-spanid":       c.GetHeader("x-b3-spanid"),
+			"x-b3-parentspanid": c.GetHeader("x-b3-parentspanid"),
+			"x-b3-sampled":      c.GetHeader("x-b3-sampled"),
+			"x-b3-flags":        c.GetHeader("x-b3-flags"),
+			"x-request-id":      c.GetHeader("x-request-id"),
+			"test":              c.GetHeader("x-b3-traceid"),
 		})
 
 		var ctx = metadata.NewOutgoingContext(context.Background(), header)
