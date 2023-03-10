@@ -45,8 +45,7 @@ func main() {
 			"x-b3-sampled":      c.GetHeader("x-b3-sampled"),
 			"x-b3-flags":        c.GetHeader("x-b3-flags"),
 			"x-request-id":      c.GetHeader("x-request-id"),
-			"test":              c.GetHeader("x-b3-traceid"),
-			"test-x-request-id": c.GetHeader("x-request-id"),
+			"x-ot-span-context": c.GetHeader("x-ot-span-context"),
 		})
 
 		var ctx = metadata.NewOutgoingContext(context.Background(), header)

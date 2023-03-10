@@ -37,7 +37,13 @@ func (o orderService) getUserName(c context.Context) string {
 	fmt.Println(md["test-x-request-id"])
 	fmt.Println(md["x-request-id"])
 	header := metadata.New(map[string]string{
-		"x-request-id": md["x-request-id"][0],
+		"x-request-id":      md["x-request-id"][0],
+		"x-b3-traceid":      md["x-b3-traceid"][0],
+		"x-b3-spanid":       md["x-b3-spanid"][0],
+		"x-b3-parentspanid": md["x-b3-parentspanid"][0],
+		"x-b3-sampled":      md["x-b3-sampled"][0],
+		"x-b3-flags":        md["x-b3-flags"][0],
+		"x-ot-span-context": md["x-ot-span-context"][0],
 	})
 
 	ctx := metadata.NewOutgoingContext(context.Background(), header)
