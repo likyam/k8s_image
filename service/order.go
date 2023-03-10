@@ -34,7 +34,7 @@ func (o orderService) getUserName(ctx context.Context) string {
 		return ""
 	}
 
-	fmt.Println(md)
+	fmt.Println(md["x-request-id"])
 	//header := metadata.New(map[string]string{
 	//	"x-b3-traceid": traceid,
 	//})
