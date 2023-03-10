@@ -62,6 +62,7 @@ func main() {
 			"x-b3-parentspanid": c.GetHeader("x-b3-parentspanid"),
 			"x-b3-sampled":      c.GetHeader("x-b3-sampled"),
 			"x-b3-flags":        c.GetHeader("x-b3-flags"),
+			"x-ot-span-context": c.GetHeader("x-ot-span-context"),
 		})
 	})
 	r.GET("/healthz", func(c *gin.Context) {
